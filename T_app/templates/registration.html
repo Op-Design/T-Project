@@ -31,11 +31,14 @@
       <main role="main" class="inner cover">
         <div class="py-5">
           <form class="needs-validation" novalidate action="/login" method="POST">
-            <div class="py-2 text-center">
+            <div class="py-2">
                 <h2>Registration</h2>
             </div>
+            <div class="py-2 text-warning">
+              Please record and do not loose your login information.<br>Password recovery is currently unavailable. 
+            </div>
             <div class="py-3 container text-dark bg-light shadow-lg rounded">
-              <div class="py-1 text-warning text-left">
+              <div class="py-1 text-danger text-left">
               <!-- {% csrf_token %}
               {% if messages %}
                 <ul class = "messages">
