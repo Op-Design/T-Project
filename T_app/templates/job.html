@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Coding Dojo Survey</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/form-validation.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+    <span class="text-right"><a href=/logout>Logout</a> | </span>
+    <span class="text-right"><a href=/jobs>Dashboard</a></span>
+    <p class="text-right"><a href=/jobs>Go Back</a></p>
+    <div class="col-md order-md-1">
+      <h2 class="py-5">Hello {{ request.session.first_name }}! These are the job details!</h2>
+      <h5 class="py-5">{{ job.title }}</h5>
+        <div class="table-responsive">
+          <p>Title: {{ job.description }}</p>
+          <p>Network: {{ job.location }}</p> 
+          <p>Posted By: {{ job.user.first_name }}</p>
+          <p>Created on: {{ job.created_at }}</p> <br><br><br><br>
+        </div>
+        {% if not job.user.id == user.user_id %}
+        <span><a href='/jobhelper/{{job.id}}'>Add to my jobs</a> | </span>
+        <span><a href='/destory_jobhelper/{{job.id}}'>Give Up</a></span>      
+        {% endif %}
+    </div>
+  </body>
+</html>

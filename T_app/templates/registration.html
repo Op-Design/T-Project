@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Registraion</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/cover.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <h3 class="masthead-brand">T-Project</h3>
+          <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link" href="#">Contact</a>
+          </nav>
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        <div class="py-5">
+          <form class="needs-validation" novalidate action="/login" method="POST">
+            <div class="py-2 text-center">
+                <h2>Registration</h2>
+            </div>
+            <div class="py-3 container text-dark bg-light shadow-lg rounded">
+              <div class="py-1 text-warning text-left">
+              <!-- {% csrf_token %}
+              {% if messages %}
+                <ul class = "messages">
+                {% for message in messages %}
+                  <li {% if message.tags%} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                {% endfor %}
+                </ul>
+              {% endif %} -->
+              </div>
+              <div class="row">
+                <div class="col-3">
+                  <div class="py-2 text-left">
+                    <label for="first_name">First Name</label>
+                  </div>
+                  <div class="py-2 text-left">
+                    <label for="last_name">Last Name</label>
+                  </div>
+                  <div class="py-2 text-left">
+                    <label for="email">Email</label>
+                  </div>
+                  <div class="py-2 text-left">
+                    <label for="password">Password</label>
+                  </div>
+                  <div class="py-2 text-left">
+                    <label for="c_password">Confirm Password</label>
+                  </div>
+                </div>
+                <div class="col-9">
+                    <input type="text" name= "email" class="form-control" id="email" placeholder="" value="" required>
+                  <div class="py-2">
+                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                  </div>
+                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                  <div class="py-2">
+                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                  </div>
+                  <div class="py-2">
+                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="lead py-4">
+              <a href="#" class="btn btn-lg btn-secondary shadow-lg" type="submit">Submit</a>
+            </p>
+            <p class="py-2"><a href="/">Login</a></p>
+          </form>
+        </div>
+      </main>
+
+      <footer class="mastfoot mt-auto">
+      </footer>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
