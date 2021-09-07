@@ -4,9 +4,8 @@ from .models import User, Job
 import bcrypt
 
 def registration(request):
-    pass
     if request.method == "GET":
-        return render (request, 'login_and_regis.html')
+        return render (request, 'registrartion.html')
     elif request.method == "POST":
         # Validates input data meets standards in models
         errors = User.objects.registration_validator(request.POST)
@@ -33,6 +32,8 @@ def registration(request):
         return redirect ('/')
 
 def login(request):
+    if request.method == "GET":
+        return render (request, 'registrartion.html')
     errors = User.objects.login_validator(request.POST)
     if len(errors)>0:
         for key, value in errors.items():
