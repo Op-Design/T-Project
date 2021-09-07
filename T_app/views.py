@@ -3,7 +3,7 @@ from django.contrib import messages
 from .models import User, Job
 import bcrypt
 
-def register(request):
+def registration(request):
     pass
     if request.method == "GET":
         return render (request, 'login_and_regis.html')
@@ -28,7 +28,7 @@ def register(request):
             request.session['user_id'] = new_user.id
             request.session['first_name']=new_user.first_name
 
-            return redirect('/jobs')
+            return redirect('/homes')
     else:
         return redirect ('/')
 
@@ -42,7 +42,7 @@ def login(request):
         logged_user=User.objects.get(email=request.POST['email'])
         request.session['user_id']=logged_user.id
         request.session['first_name']=logged_user.first_name
-        return redirect('/jobs')
+        return redirect('/homes')
     return redirect('/')
 
 def jobs(request):
@@ -76,7 +76,7 @@ def jobcreate(request):
                 location=request.POST['location'],
                 user=User.objects.get(id=request.session['user_id']),
             )
-            return redirect('/jobs')
+            return redirect('/homes')
     return redirect('/newjob')
 
 def edit_job (request, id):
@@ -86,7 +86,7 @@ def edit_job (request, id):
             "job" : Job.objects.get(id=id),
         }
         return render(request,'job_edit.html',context)
-    return redirect(request, '/jobs')
+    return redirect(request, '/homes')
 
 def job_edited (request, id):
     if request.method == 'POST':
@@ -101,8 +101,8 @@ def job_edited (request, id):
             update.description=request.POST['description']
             update.location=request.POST['location']
             update.save()
-            return redirect('/jobs')
-    return redirect('/jobs')
+            return redirect('/homes')
+    return redirect('/homes')
 
 def job(request, id):
     if request.method == "GET":
@@ -114,7 +114,7 @@ def job(request, id):
 def jobdestroy(request, id):
     delete = Job.objects.get(id=id)
     delete.delete()
-    return redirect('/jobs')
+    return redirect('/homes')
 
 def logout(request):
     request.session.flush()
@@ -126,13 +126,13 @@ def jobhelpercreate(request,id):
     logged_user = User.objects.get(id=request.session["user_id"])
     job = Job.objects.get(id=id)
     logged_user.job_helping.add(job)
-    return redirect('/jobs')
+    return redirect('/homes')
 
 def destroyjobhelper(request, id):
     logged_user = User.objects.get(id=request.session["user_id"])
     job = Job.objects.get(id=id)
     logged_user.job_helping.remove(job)
-    return redirect('/jobs')
+    return redirect('/homes')
 
 def users_view(request):
     context = {

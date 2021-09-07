@@ -30,15 +30,11 @@ class UserManager (models.Manager):
                     errors['creds']='Invalid Credentials'
         return errors
 
-class JobManager (models.Manager):
+class HomeManager (models.Manager):
     def basic_validator(self,postData):
         errors={}
-        if len(postData['title'])<3:
-            errors['title']='"Title" should be at least 3 characters long'
-        if len(postData['description'])<3:
-            errors['description']='"Description" should be at least 3 characters long'
-        if len(postData['location'])<3:
-            errors['location']='"Location" should be at least 3 characters long'
+        if len(postData['name'])<2:
+            errors['name']='Name should be at least 2 characters long'
         return errors
 
 class User(models.Model):
@@ -53,15 +49,42 @@ class User(models.Model):
     def __repr__(self):
         return f"<User: {self.first_name} {self.last_name} ({self.id})>"
 
-class Job(models.Model):
-    title=models.CharField(max_length=255)
+# Homes . . . User:Homes . . . 1:M
+# Yearly . . . Homes:Yearly . . . 1:M
+# Monthly . . . Homes:Monthly . . . 1:M
+# Weekly . . . Homes:Weekly . . . 1:M
+# Daily . . . Homes:Daily . . . 1:M
+
+class Home(models.Model):
+    name=models.CharField(max_length=255)
     description=models.CharField(max_length=255)
     location=models.CharField(max_length=255)
-    user = models.ForeignKey(User, related_name="user_job", on_delete = models.CASCADE)
-    job_helper = models.ManyToManyField(User, related_name="job_helping")
+    user = models.ForeignKey(User, related_name="user_home", on_delete = models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
-    objects=JobManager()
+    objects=HomeManager()
     
     def __repr__(self):
-        return f"<Job: {self.by} ({self.id})>"
+        return f"<Home: {self.name} ({self.location})>"
+
+class Year(models.Model):
+    year=models.IntegerField()
+    jan_energy=models.IntegerField()
+    feb_energy=models.IntegerField()
+    mar_energy=models.IntegerField()
+    apr_energy=models.IntegerField()
+    may_energy=models.IntegerField()
+    jun_energy=models.IntegerField()
+    jul_energy=models.IntegerField()
+    aug_energy=models.IntegerField()
+    sep_energy=models.IntegerField()
+    oct_energy=models.IntegerField()
+    nov_energy=models.IntegerField()
+    dec_energy=models.IntegerField()
+    home = models.ForeignKey(User, related_name="home_year", on_delete = models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
+    def __repr__(self):
+        return f"<Year: {self.home.user} ({self.home}) ({self.year})>"
+
