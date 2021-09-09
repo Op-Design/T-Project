@@ -1,18 +1,18 @@
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
-from .models import User, Job
+from .models import User, Home, Year
 import bcrypt
 
 def registration(request):
     if request.method == "GET":
-        return render (request, 'registrartion.html')
+        return render (request, 'registration.html')
     elif request.method == "POST":
         # Validates input data meets standards in models
         errors = User.objects.registration_validator(request.POST)
         if len(errors)>0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/')
+            return redirect('/registration')
         # Sends data and creates objects is everything is verified
         else:
             password = request.POST['password']
@@ -26,25 +26,97 @@ def registration(request):
             # Saves data in sessions for future use.
             request.session['user_id'] = new_user.id
             request.session['first_name']=new_user.first_name
-
             return redirect('/homes')
     else:
         return redirect ('/')
 
 def login(request):
     if request.method == "GET":
-        return render (request, 'registrartion.html')
-    errors = User.objects.login_validator(request.POST)
-    if len(errors)>0:
-        for key, value in errors.items():
-            messages.error(request, value)
-        return redirect('/')
-    elif len(errors)==0:
-        logged_user=User.objects.get(email=request.POST['email'])
-        request.session['user_id']=logged_user.id
-        request.session['first_name']=logged_user.first_name
-        return redirect('/homes')
+        if 'user_id' in request.session:
+            return redirect ('/homes')
+        return render (request, 'login.html')
+    elif request.method == "POST":
+        errors = User.objects.login_validator(request.POST)
+        if len(errors)>0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/')
+        elif len(errors)==0:
+            logged_user=User.objects.get(email=request.POST['email'])
+            request.session['user_id']=logged_user.id
+            request.session['first_name']=logged_user.first_name
+            return redirect('/homes')
+    else:
+        return redirect ('/')
+
+def homes(request):
+    if request.method == "GET":
+        if 'user_id' in request.session:
+            logged_user = User.objects.get(id=request.session['user_id'])
+            context = {
+            "homes" : Home.objects.filter(user=logged_user),
+            }
+            return render(request, 'homes.html', context)
+    return redirect ('/')
+
+def home(request):
+    if request.method == 'GET':
+        return render(request, 'home.html')
     return redirect('/')
+    
+def home_create(request):
+    if request.method == 'POST':
+        errors = Home.objects.basic_validator(request.POST)
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/home')
+        else:
+            Home.objects.create(
+                name= request.POST['name'],
+                location=request.POST['location'],
+                description=request.POST['description'],
+                user=User.objects.get(id=request.session['user_id']),
+            )
+            return redirect('/homes')
+    return redirect('/homes')
+
+def home_edit (request, id):
+    if request.method == 'GET':
+        logged_user = User.objects.get(id=request.session['user_id']):
+        if Home.objects.filter(user=logged_user):
+
+        context = {
+            "id" : id,
+            "job" : Job.objects.get(id=id),
+        }
+        return render(request,'job_edit.html',context)
+    return redirect(request, '/homes')
+
+def home_edited (request, id):
+    if request.method == 'POST':
+        errors = Job.objects.basic_validator(request.POST)
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect(f'/home/{id}')
+        else:
+            update = Job.objects.get(id=id)
+            update.title = request.POST['title']
+            update.description=request.POST['description']
+            update.location=request.POST['location']
+            update.save()
+            return redirect('/homes')
+    return redirect('/homes')
+
+def energy_use(request):
+    pass
+def new_report(request):
+    pass
+def report_create(request):
+    pass
+
+# Old stuff below
 
 def jobs(request):
     logged_user = User.objects.get(id=request.session['user_id'])
@@ -140,3 +212,12 @@ def users_view(request):
     "users" : User.objects.all(),
     }
     return render(request, 'users_view.html', context)
+
+
+
+
+
+def edit_report(request):
+    pass
+def report_edited(request):
+    pass

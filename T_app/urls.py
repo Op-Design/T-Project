@@ -7,8 +7,10 @@ urlpatterns = [
     path('login', views.login),
 
     path('homes', views.homes),
-    path('new_home', views.new_home),
+    path('new_home', views.home),
     path('home_create', views.home_create),
+    path('home/<int:id>', views.home_edit),
+    path('home/edit/<int:id>', views.home_edited),
 
     path('energy_use', views.energy_use),
     path('new_report', views.new_report),

@@ -6,6 +6,10 @@ class UserManager (models.Manager):
         errors={}
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         email = User.objects.filter(email=postData['email'])
+        if len(postData['first_name'])<2:
+            errors['first_name']='First name should be at least 2 characters long'
+        if len(postData['last_name'])<5:
+            errors['last_name']='Last name should be at least 2 characters long'
         if not EMAIL_REGEX.match(postData['email']):
             errors['email_invalid'] = 'Invalid email address'
         if len(postData['email'])==None:
@@ -57,8 +61,8 @@ class User(models.Model):
 
 class Home(models.Model):
     name=models.CharField(max_length=255)
-    description=models.CharField(max_length=255)
     location=models.CharField(max_length=255)
+    description=models.CharField(max_length=255)
     user = models.ForeignKey(User, related_name="user_home", on_delete = models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -81,7 +85,7 @@ class Year(models.Model):
     oct_energy=models.IntegerField()
     nov_energy=models.IntegerField()
     dec_energy=models.IntegerField()
-    home = models.ForeignKey(User, related_name="home_year", on_delete = models.CASCADE)
+    home = models.ForeignKey(Home, related_name="home_year", on_delete = models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     

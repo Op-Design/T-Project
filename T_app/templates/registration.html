@@ -10,10 +10,10 @@
     <title>Registraion</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../static/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../static/cover.css" rel="stylesheet">
+    <link href="../static/css/cover.css" rel="stylesheet">
   </head>
 
   <body class="text-center">
@@ -30,23 +30,24 @@
 
       <main role="main" class="inner cover">
         <div class="py-5">
-          <form class="needs-validation" novalidate action="/login" method="POST">
+          <form class="needs-validation" novalidate action="/registration" method="POST">
+            {% csrf_token %}
             <div class="py-2">
-                <h2>Registration</h2>
+              <h2>Registration</h2>
             </div>
             <div class="py-2 text-warning">
-              Please record and do not loose your login information.<br>Password recovery is currently unavailable. 
+              Please record and do not lose your login information.<br>Password recovery is currently unavailable. 
             </div>
             <div class="py-3 container text-dark bg-light shadow-lg rounded">
               <div class="py-1 text-danger text-left">
-              <!-- {% csrf_token %}
+              {% csrf_token %}
               {% if messages %}
                 <ul class = "messages">
                 {% for message in messages %}
                   <li {% if message.tags%} class="{{message.tags}}" {% endif %}>{{message}}</li>
                 {% endfor %}
                 </ul>
-              {% endif %} -->
+              {% endif %}
               </div>
               <div class="row">
                 <div class="col-3">
@@ -67,24 +68,24 @@
                   </div>
                 </div>
                 <div class="col-9">
+                    <input type="text" name= "first_name" class="form-control" id="first_name" placeholder="" value="" required>
+                  <div class="py-2">
+                    <input type="text" name= "last_name" class="form-control" id="last_name" placeholder="" value="" required>
+                  </div>
                     <input type="text" name= "email" class="form-control" id="email" placeholder="" value="" required>
                   <div class="py-2">
                     <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
                   </div>
-                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
                   <div class="py-2">
-                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
-                  </div>
-                  <div class="py-2">
-                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                    <input type="text" name= "c_password" class="form-control" id="c_password" placeholder="" value="" required>
                   </div>
                 </div>
               </div>
             </div>
             <p class="lead py-4">
-              <a href="#" class="btn btn-lg btn-secondary shadow-lg" type="submit">Submit</a>
+              <button class="btn btn-lg btn-secondary shadow-lg" type="submit">Submit</button>
             </p>
-            <p class="py-2"><a href="/">Login</a></p>
+            <p class="py-2"><a href="/login">Login</a></p>
           </form>
         </div>
       </main>
