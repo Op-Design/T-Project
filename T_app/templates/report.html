@@ -78,23 +78,38 @@
 
           <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
-          <h2>Section title</h2>
+          <h2>Monthly Report</h2>
           <div class="table-responsive">
             <table class="table table-striped table-sm">
               <thead>
                 <tr>
-                  <th>Section Title</th>
+                  <th>Month</th>
                   <th>Actual</th>
-                  <th>Expected</th>
-                  <th>Delta (%)</th>
+                  <!-- <th>Expected</th> -->
+                  <!-- <th>Delta (%)</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1,001</td>
+                  <td>{{report.jan_energy}}</td>
+                  <td>{{report.feb_energy}}</td>
+                  <td>{{report.mar_energy}}</td>
+                  <td>{{report.apr_energy}}</td>
+                  <td>{{report.may_energy}}</td>
+                  <td>{{report.jun_energy}}</td>
+                  <td>{{report.jul_energy}}</td>
+                  <td>{{report.aug_energy}}</td>
+                  <td>{{report.sep_energy}}</td>
+                  <td>{{report.oct_energy}}</td>
+                  <td>{{report.nov_energy}}</td>
+                  <td>{{report.dec_energy}}</td>
+                  <td>{{}}</td>
                   <td>Lorem</td>
                   <td>Lorem</td>
                   <td>Lorem</td>
+                </tr>
+                <tr>
+                  
                 </tr>
               </tbody>
             </table>

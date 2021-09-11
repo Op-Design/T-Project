@@ -1,5 +1,5 @@
 from django.db import models
-import re, bcrypt
+import re, bcrypt, calendar
 
 class UserManager (models.Manager):
     def registration_validator(self,postData):
@@ -71,7 +71,7 @@ class Home(models.Model):
     def __repr__(self):
         return f"<Home: {self.name} ({self.location})>"
 
-class Year(models.Model):
+class ReportY(models.Model):
     year=models.IntegerField()
     jan_energy=models.IntegerField()
     feb_energy=models.IntegerField()

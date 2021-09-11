@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
-from .models import User, Home, Year
+from .models import User, Home, ReportY
 import bcrypt
 
 def registration(request):
@@ -82,37 +82,67 @@ def home_create(request):
     return redirect('/homes')
 
 def home_edit (request, id):
-    if request.method == 'GET':
-        logged_user = User.objects.get(id=request.session['user_id']):
-        if Home.objects.filter(user=logged_user):
+    pass
+    # if request.method == 'GET':
+    #     logged_user = User.objects.get(id=request.session['user_id']):
+    #     if Home.objects.filter(user=logged_user):
 
-        context = {
-            "id" : id,
-            "job" : Job.objects.get(id=id),
-        }
-        return render(request,'job_edit.html',context)
-    return redirect(request, '/homes')
+    #     context = {
+    #         "id" : id,
+    #         "job" : Job.objects.get(id=id),
+    #     }
+    #     return render(request,'job_edit.html',context)
+    # return redirect(request, '/homes')
 
 def home_edited (request, id):
-    if request.method == 'POST':
-        errors = Job.objects.basic_validator(request.POST)
-        if len(errors) > 0:
-            for key, value in errors.items():
-                messages.error(request, value)
-            return redirect(f'/home/{id}')
-        else:
-            update = Job.objects.get(id=id)
-            update.title = request.POST['title']
-            update.description=request.POST['description']
-            update.location=request.POST['location']
-            update.save()
-            return redirect('/homes')
-    return redirect('/homes')
+    pass
+    # if request.method == 'POST':
+    #     errors = Job.objects.basic_validator(request.POST)
+    #     if len(errors) > 0:
+    #         for key, value in errors.items():
+    #             messages.error(request, value)
+    #         return redirect(f'/home/{id}')
+    #     else:
+    #         update = Job.objects.get(id=id)
+    #         update.title = request.POST['title']
+    #         update.description=request.POST['description']
+    #         update.location=request.POST['location']
+    #         update.save()
+    #         return redirect('/homes')
+    # return redirect('/homes')
 
-def energy_use(request):
-    pass
-def new_report(request):
-    pass
+def reports(request, name):
+    if request.method == "GET":
+        if 'user_id' in request.session:
+            logged_user = User.objects.get(id=request.session['user_id'])
+            logged_user_home = Home.objects.get(name=name)
+            # get list of month energy use
+            report = ReportY.objects.filter
+            # get list of months
+            
+            context = {
+            "report" : ReportY.objects.filter(home=logged_user_home).first(),
+            }
+            return render(request, 'report.html', context)
+    return redirect ('/')
+
+def reports_year(request, name, year):
+    if request.method == "GET":
+        if 'user_id' in request.session:
+            logged_user = User.objects.get(id=request.session['user_id'])
+            logged_user_home = Home.objects.get(name=name)
+            # Retreives the currently selccted year report of the current home
+            context = {
+            "report" : ReportY.objects.filter(home=logged_user_home).get(year=year),
+            }
+            return render(request, 'report.html', context)
+    return redirect ('/')
+
+def new_report(request,name):
+    if request.method == 'GET':
+        return render(request, 'input_report.html')
+    return redirect('/')
+    
 def report_create(request):
     pass
 
