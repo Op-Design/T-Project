@@ -112,6 +112,13 @@ def home_edited (request, id):
     #         return redirect('/homes')
     # return redirect('/homes')
 
+def noreport(request):
+    if request.method == "GET":
+        if 'user_id' in request.session:
+            return render(request, 'noreport.html')
+        return redirect ('/')
+    return redirect ('/')
+
 def reports(request, id):
     if request.method == "GET":
         if 'user_id' in request.session:
@@ -125,29 +132,41 @@ def reports_year(request, id, year):
     if request.method == "GET":
         if 'user_id' in request.session:
             logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.filter(user=logged_user).filter(name=id)
+            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
+            report = ReportY.objects.filter(home=logged_user_home).filter(year=year)[0]
             # Retreives the currently selccted year report of the current home
             context = {
-            "report" : ReportY.objects.filter(home=logged_user_home).filter(year=year),
+            "home":logged_user_home,
+            "report" : report,
             }
             return render(request, 'report.html', context)
     return redirect ('/')
 
-def new_report(request,name):
+def new_report(request,id):
+    # I have to create a verification here to make sure current user is home owner
+    # So you don't create a report under someone else's home
+    # Something like 'if Home.user == current user'
     if request.method == 'GET':
-        return render(request, 'input_report.html')
+        if 'user_id' in request.session:
+            logged_user = User.objects.get(id=request.session['user_id'])
+            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
+            context = {
+            "home":logged_user_home,
+            }
+            return render(request, 'input_report.html', context)
     return redirect('/')
 
-def report_create(request,name):
+def report_create(request,id):
     if request.method == 'POST':
-        errors = ReportY.objects.basic_validator(request.POST)
+        logged_user = User.objects.get(id=request.session['user_id'])
+        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
+        errors = ReportY.objects.basic_validator(request.POST, logged_user_home)
+        home = id
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect('/new_report')
+            return redirect(f'/{home}/new_report')
         else:
-            logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.filter(user=logged_user).get(name=name)
             ReportY.objects.create(
                 year=request.POST['year'],
                 jan_energy=request.POST['jan_energy'],
@@ -162,10 +181,11 @@ def report_create(request,name):
                 oct_energy=request.POST['oct_energy'],
                 nov_energy=request.POST['nov_energy'],
                 dec_energy=request.POST['dec_energy'],
-                home=Home.objects.filter(user=logged_user).get(name=name),
+                home=logged_user_home,
             )
+            year=request.POST['year']
             # return redirect(f'{name}/reorts')
-            return redirect('/homes')
+            return redirect(f'/{home}/reports/{year}')
     return redirect('/homes')
 
 def edit_report(request):

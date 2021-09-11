@@ -12,10 +12,11 @@ urlpatterns = [
     path('home/<int:id>', views.home_edit),
     path('home/edit/<int:id>', views.home_edited),
 
+    path('noreport', views.noreport),
     path('<int:id>/reports', views.reports),
     path('<int:id>/reports/<int:year>', views.reports_year),
-    path('<str:name>/new_report', views.new_report),
-    path('<str:name>/report_create', views.report_create),
+    path('<int:id>/new_report', views.new_report),
+    path('<int:id>/report_create', views.report_create),
 
     path('<str:name>/edit_report/<int:year>', views.edit_report),
     path('<str:name>/report_edited/<int:year>', views.report_edited),

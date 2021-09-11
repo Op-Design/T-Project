@@ -1,64 +1,16 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
-
-    <title>Data Input Monthly</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/static/css/dashboard.css" rel="stylesheet">
-  </head>
+  
+  {% include 'base/head.html' %}
 
   <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">T-Project</a>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Sign out</a>
-        </li>
-      </ul>
-    </nav>
+    
+    {% include 'base/navbar.html' %}
 
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="home"></span>
-                  Homes
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  <span data-feather="file"></span>
-                  Energy Use<span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="trello"></span>
-                  Transition
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Community
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        
+        {% include 'base/sidebar_energy_act.html' %}
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -67,8 +19,8 @@
               <div class="btn-group mr-2">
                 <!-- <button class="btn btn-sm btn-outline-secondary">Import</button> -->
                 <!-- <button class="btn btn-sm btn-outline-secondary">Export</button> -->
-                <a href="{{home.id}}/reports">
-                <button class="btn btn-sm btn-outline-secondary">New</button>
+                <a href="/{{home.id}}/new_report">
+                <button class="btn btn-sm btn-outline-secondary">Add</button>
                 </a>
                 <button class="btn btn-sm btn-outline-secondary">Edit</button>
               </div>
@@ -95,57 +47,57 @@
               <tbody>
                 <tr>
                   <td>January</td>
-                  <td>{{ report.jan_energy }}</td>
+                  <td>{{ report.jan_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>Februrary</td>
-                  <td>{{ report.feb_energy }}</td>
+                  <td>{{ report.feb_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>March</td>
-                  <td>{{ report.mar_energy }}</td>
+                  <td>{{ report.mar_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>April</td>
-                  <td>{{ report.apr_energy }}</td>
+                  <td>{{ report.apr_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>May</td>
-                  <td>{{ report.may_energy }}</td>
+                  <td>{{ report.may_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>June</td>
-                  <td>{{ report.jun_energy }}</td>
+                  <td>{{ report.jun_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>July</td>
-                  <td>{{ report.jul_energy }}</td>
+                  <td>{{ report.jul_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>August</td>
-                  <td>{{ report.aug_energy }}</td>
+                  <td>{{ report.aug_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>September</td>
-                  <td>{{ report.sep_energy }}</td>
+                  <td>{{ report.sep_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>October</td>
-                  <td>{{ report.oct_energy }}</td>
+                  <td>{{ report.oct_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>November</td>
-                  <td>{{ report.nov_energy }}</td>
+                  <td>{{ report.nov_energy }} kWh</td>
                 </tr>
                 <tr>
                   <td>December</td>
-                  <td>{{ report.dec_energy }}</td>
+                  <td>{{ report.dec_energy }} kWh</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="py-1 text-warning text-center">
-            <button class="btn btn-sm btn-danger">Delete Section Title</button>
+            <button class="btn btn-sm btn-danger">Delete Report</button>
           </div>
          </main>
       </div>
@@ -174,7 +126,19 @@
         data: {
           labels: ["January", "February", "March", "Arpil", "May", "June", "July", "August", "September", "October", "November", "December" ],
           datasets: [{
-            data: [{{ report.jan_energy }}, 21345, 18483, 24003, 23489, 24092, 12034],
+            data: [{{ report.jan_energy }},
+            {{ report.feb_energy }},
+            {{ report.mar_energy }},
+            {{ report.apr_energy }},
+            {{ report.may_energy }},
+            {{ report.jun_energy }},
+            {{ report.jul_energy }},
+            {{ report.aug_energy }},
+            {{ report.sep_energy }},
+            {{ report.oct_energy }},
+            {{ report.nov_energy }},
+            {{ report.dec_energy }},
+            ],
             lineTension: 0,
             backgroundColor: 'transparent',
             borderColor: '#007bff',
