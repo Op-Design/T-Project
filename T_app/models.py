@@ -41,6 +41,38 @@ class HomeManager (models.Manager):
             errors['name']='Name should be at least 2 characters long'
         return errors
 
+class ReportYManager (models.Manager):
+    def basic_validator(self,postData):
+        errors={}
+        year = ReportY.objects.filter(home=postData['home']).filter(year=postData['year'])
+        if year:
+            errors['year_unique']='A report for this year has already beed created. Try editing the report instead.'
+        if len(postData['jan_energy'])<1:
+            errors['jan_energy']='January energy use should be at least 1 kWh'
+        if len(postData['feb_energy'])<1:
+            errors['feb_energy']='Febuary energy use should be at least 1 kWh'
+        if len(postData['mar_energy'])<1:
+            errors['mar_energy']='March energy use should be at least 1 kWh'
+        if len(postData['april_energy'])<1:
+            errors['april_energy']='April energy use should be at least 1 kWh'
+        if len(postData['may_energy'])<1:
+            errors['may_energy']='May energy use should be at least 1 kWh'
+        if len(postData['jun_energy'])<1:
+            errors['jun_energy']='June energy use should be at least 1 kWh'
+        if len(postData['jul_energy'])<1:
+            errors['jul_energy']='July energy use should be at least 1 kWh'
+        if len(postData['aug_energy'])<1:
+            errors['aug_energy']='August energy use should be at least 1 kWh'
+        if len(postData['sep_energy'])<1:
+            errors['sep_energy']='September energy use should be at least 1 kWh'
+        if len(postData['oct_energy'])<1:
+            errors['oct_energy']='October energy use should be at least 1 kWh'
+        if len(postData['nov_energy'])<1:
+            errors['nov_energy']='November energy use should be at least 1 kWh'
+        if len(postData['dec_energy'])<1:
+            errors['dec_energy']='December energy use should be at least 1 kWh'
+        return errors
+
 class User(models.Model):
     first_name=models.CharField(max_length=255)
     last_name=models.CharField(max_length=255)
@@ -88,6 +120,7 @@ class ReportY(models.Model):
     home = models.ForeignKey(Home, related_name="home_year", on_delete = models.CASCADE)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
+    objects=ReportYManager()
     
     def __repr__(self):
         return f"<Year: {self.home.user} ({self.home}) ({self.year})>"

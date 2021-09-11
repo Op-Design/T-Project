@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from .models import User, Home, ReportY
 import bcrypt
+from datetime import date
 
 def registration(request):
     if request.method == "GET":
@@ -111,29 +112,23 @@ def home_edited (request, id):
     #         return redirect('/homes')
     # return redirect('/homes')
 
-def reports(request, name):
+def reports(request, id):
     if request.method == "GET":
         if 'user_id' in request.session:
-            logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.get(name=name)
-            # get list of month energy use
-            report = ReportY.objects.filter
-            # get list of months
-            
-            context = {
-            "report" : ReportY.objects.filter(home=logged_user_home).first(),
-            }
-            return render(request, 'report.html', context)
+            current_year=date.today().year
+            home = id
+            return redirect(f'/{home}/reports/{current_year}')
+        return redirect ('/')
     return redirect ('/')
 
-def reports_year(request, name, year):
+def reports_year(request, id, year):
     if request.method == "GET":
         if 'user_id' in request.session:
             logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.get(name=name)
+            logged_user_home = Home.objects.filter(user=logged_user).filter(name=id)
             # Retreives the currently selccted year report of the current home
             context = {
-            "report" : ReportY.objects.filter(home=logged_user_home).get(year=year),
+            "report" : ReportY.objects.filter(home=logged_user_home).filter(year=year),
             }
             return render(request, 'report.html', context)
     return redirect ('/')
@@ -142,8 +137,40 @@ def new_report(request,name):
     if request.method == 'GET':
         return render(request, 'input_report.html')
     return redirect('/')
-    
-def report_create(request):
+
+def report_create(request,name):
+    if request.method == 'POST':
+        errors = ReportY.objects.basic_validator(request.POST)
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect('/new_report')
+        else:
+            logged_user = User.objects.get(id=request.session['user_id'])
+            logged_user_home = Home.objects.filter(user=logged_user).get(name=name)
+            ReportY.objects.create(
+                year=request.POST['year'],
+                jan_energy=request.POST['jan_energy'],
+                feb_energy=request.POST['feb_energy'],
+                mar_energy=request.POST['mar_energy'],
+                apr_energy=request.POST['apr_energy'],
+                may_energy=request.POST['may_energy'],
+                jun_energy=request.POST['jun_energy'],
+                jul_energy=request.POST['jul_energy'],
+                aug_energy=request.POST['aug_energy'],
+                sep_energy=request.POST['sep_energy'],
+                oct_energy=request.POST['oct_energy'],
+                nov_energy=request.POST['nov_energy'],
+                dec_energy=request.POST['dec_energy'],
+                home=Home.objects.filter(user=logged_user).get(name=name),
+            )
+            # return redirect(f'{name}/reorts')
+            return redirect('/homes')
+    return redirect('/homes')
+
+def edit_report(request):
+    pass
+def report_edited(request):
     pass
 
 # Old stuff below
@@ -242,12 +269,3 @@ def users_view(request):
     "users" : User.objects.all(),
     }
     return render(request, 'users_view.html', context)
-
-
-
-
-
-def edit_report(request):
-    pass
-def report_edited(request):
-    pass
