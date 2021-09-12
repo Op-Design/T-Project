@@ -50,6 +50,12 @@ def login(request):
     else:
         return redirect ('/')
 
+def logout(request):
+    request.session.flush()
+    return redirect('/')
+
+# Home functions
+
 def homes(request):
     if request.method == "GET":
         if 'user_id' in request.session:
@@ -67,7 +73,8 @@ def home(request):
     
 def home_create(request):
     if request.method == 'POST':
-        errors = Home.objects.basic_validator(request.POST)
+        logged_user = User.objects.get(id=request.session['user_id'])
+        errors = Home.objects.basic_validator(request.POST, logged_user)
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
@@ -83,34 +90,40 @@ def home_create(request):
     return redirect('/homes')
 
 def home_edit (request, id):
-    pass
-    # if request.method == 'GET':
-    #     logged_user = User.objects.get(id=request.session['user_id']):
-    #     if Home.objects.filter(user=logged_user):
-
-    #     context = {
-    #         "id" : id,
-    #         "job" : Job.objects.get(id=id),
-    #     }
-    #     return render(request,'job_edit.html',context)
-    # return redirect(request, '/homes')
+    if request.method == 'GET':
+        logged_user = User.objects.get(id=request.session['user_id'])
+        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+        context = {
+            "id" : id,
+            "home" : logged_user_home,
+        }
+        return render(request,'home_edit.html',context)
+    return redirect(request, '/')
 
 def home_edited (request, id):
-    pass
-    # if request.method == 'POST':
-    #     errors = Job.objects.basic_validator(request.POST)
-    #     if len(errors) > 0:
-    #         for key, value in errors.items():
-    #             messages.error(request, value)
-    #         return redirect(f'/home/{id}')
-    #     else:
-    #         update = Job.objects.get(id=id)
-    #         update.title = request.POST['title']
-    #         update.description=request.POST['description']
-    #         update.location=request.POST['location']
-    #         update.save()
-    #         return redirect('/homes')
-    # return redirect('/homes')
+    if request.method == 'POST':
+        logged_user = User.objects.get(id=request.session['user_id'])
+        errors = Home.objects.basic_validator(request.POST, logged_user)
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect(f'/home/{id}')
+        else:
+            update = Home.objects.get(id=id)
+            update.name= request.POST['name']
+            update.location=request.POST['location']
+            update.description=request.POST['description']
+            update.save()
+            return redirect('/homes')
+    return redirect('/homes')
+
+def homedestroy(request, id):
+    logged_user = User.objects.get(id=request.session['user_id'])
+    logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+    logged_user_home.delete()
+    return redirect('/homes')
+
+# Report functions
 
 def noreport(request):
     if request.method == "GET":
@@ -132,12 +145,14 @@ def reports_year(request, id, year):
     if request.method == "GET":
         if 'user_id' in request.session:
             logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
-            report = ReportY.objects.filter(home=logged_user_home).filter(year=year)[0]
+            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+            report = ReportY.objects.filter(home=logged_user_home).filter(year=year).first()
+            all_reports = ReportY.objects.filter(home=logged_user_home)
             # Retreives the currently selccted year report of the current home
             context = {
             "home":logged_user_home,
             "report" : report,
+            "all_reports": all_reports,
             }
             return render(request, 'report.html', context)
     return redirect ('/')
@@ -149,7 +164,7 @@ def new_report(request,id):
     if request.method == 'GET':
         if 'user_id' in request.session:
             logged_user = User.objects.get(id=request.session['user_id'])
-            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
+            logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
             context = {
             "home":logged_user_home,
             }
@@ -159,16 +174,17 @@ def new_report(request,id):
 def report_create(request,id):
     if request.method == 'POST':
         logged_user = User.objects.get(id=request.session['user_id'])
-        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id)[0]
-        errors = ReportY.objects.basic_validator(request.POST, logged_user_home)
+        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+        errors = ReportY.objects.basic_validator(request.POST, logged_user_home, True)
         home = id
+        year=request.POST['year']
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
             return redirect(f'/{home}/new_report')
         else:
             ReportY.objects.create(
-                year=request.POST['year'],
+                year=year,
                 jan_energy=request.POST['jan_energy'],
                 feb_energy=request.POST['feb_energy'],
                 mar_energy=request.POST['mar_energy'],
@@ -183,15 +199,80 @@ def report_create(request,id):
                 dec_energy=request.POST['dec_energy'],
                 home=logged_user_home,
             )
-            year=request.POST['year']
-            # return redirect(f'{name}/reorts')
             return redirect(f'/{home}/reports/{year}')
     return redirect('/homes')
 
-def edit_report(request):
-    pass
-def report_edited(request):
-    pass
+def edit_report(request,id,year):
+    if request.method == 'GET':
+        logged_user = User.objects.get(id=request.session['user_id'])
+        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+        report = ReportY.objects.filter(home=logged_user_home).filter(year=year).first()
+        # Retreives the currently selccted year report of the current home
+        context = {
+        "home":logged_user_home,
+        "report" : report,
+        }
+        return render(request,'report_edit.html',context)
+    return redirect(request, '/')
+
+def report_edited(request,id,year):
+    if request.method == 'POST':
+        logged_user = User.objects.get(id=request.session['user_id'])
+        logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+        errors = ReportY.objects.basic_validator(request.POST, logged_user_home, False)
+        home = id
+        if len(errors) > 0:
+            for key, value in errors.items():
+                messages.error(request, value)
+            return redirect(f'/{home}/edit_report/{year}')
+        else:
+            update = ReportY.objects.filter(home=logged_user_home).filter(year=year).first()
+            update.jan_energy=request.POST['jan_energy']
+            update.feb_energy=request.POST['feb_energy']
+            update.mar_energy=request.POST['mar_energy']
+            update.apr_energy=request.POST['apr_energy']
+            update.may_energy=request.POST['may_energy']
+            update.jun_energy=request.POST['jun_energy']
+            update.jul_energy=request.POST['jul_energy']
+            update.aug_energy=request.POST['aug_energy']
+            update.sep_energy=request.POST['sep_energy']
+            update.oct_energy=request.POST['oct_energy']
+            update.nov_energy=request.POST['nov_energy']
+            update.dec_energy=request.POST['dec_energy']
+            update.save()
+            # return redirect(f'{name}/reorts')
+            return redirect(f'/{home}/reports/{year}')
+    return redirect('/homes')
+    
+def reportdestroy(request, id, year):
+    logged_user = User.objects.get(id=request.session['user_id'])
+    logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+    report = ReportY.objects.filter(home=logged_user_home).filter(year=year).first()
+    report.delete()
+    return redirect(f'/{id}/reports')
+
+# Transition functions
+
+def transition(request):
+    if request.method == 'GET':
+        if 'user_id' in request.session:
+            return render(request, 'coming_soon.html')
+    return redirect('/')
+
+# Community functions
+
+def community(request):
+    if request.method == 'GET':
+        if 'user_id' in request.session:
+            return render(request, 'coming_soon.html')
+    return redirect('/')
+
+
+
+
+
+
+
 
 # Old stuff below
 
@@ -266,9 +347,7 @@ def jobdestroy(request, id):
     delete.delete()
     return redirect('/homes')
 
-def logout(request):
-    request.session.flush()
-    return redirect('/')
+
 
 
 # Black Belt

@@ -8,7 +8,7 @@ class UserManager (models.Manager):
         email = User.objects.filter(email=postData['email'])
         if len(postData['first_name'])<2:
             errors['first_name']='First name should be at least 2 characters long'
-        if len(postData['last_name'])<5:
+        if len(postData['last_name'])<2:
             errors['last_name']='Last name should be at least 2 characters long'
         if not EMAIL_REGEX.match(postData['email']):
             errors['email_invalid'] = 'Invalid email address'
@@ -35,18 +35,22 @@ class UserManager (models.Manager):
         return errors
 
 class HomeManager (models.Manager):
-    def basic_validator(self,postData):
+    def basic_validator(self,postData,user):
         errors={}
+        home = Home.objects.filter(user=user).filter(name=postData['name'])
+        if home:
+            errors['home_unique']='A home with this name has already been created. Please choose a different home.'
         if len(postData['name'])<2:
             errors['name']='Name should be at least 2 characters long'
         return errors
 
 class ReportYManager (models.Manager):
-    def basic_validator(self,postData,home):
+    def basic_validator(self,postData,home,create):
         errors={}
-        year = ReportY.objects.filter(home=home).filter(year=postData['year'])
-        if year:
-            errors['year_unique']='A report for this year has already beed created. Try editing the report instead.'
+        if create == True:
+            year = ReportY.objects.filter(home=home).filter(year=postData['year'])
+            if year:
+                errors['year_unique']='A report for this year has already been created. Try editing the report instead.'
         if len(postData['jan_energy'])<1:
             errors['energy']='Energy use should be at least 1 kWh'
         if len(postData['feb_energy'])<1:

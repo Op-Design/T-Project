@@ -4,7 +4,7 @@
   {% include 'base/head.html' %}
 
   <body>
-    
+
     {% include 'base/navbar.html' %}
 
     <div class="container-fluid">
@@ -22,12 +22,22 @@
                 <a href="/{{home.id}}/new_report">
                 <button class="btn btn-sm btn-outline-secondary">Add</button>
                 </a>
+                <a href="/{{home.id}}/edit_report/{{report.year}}">
                 <button class="btn btn-sm btn-outline-secondary">Edit</button>
+                </a>
               </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                Year
-              </button>
+              
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span data-feather="calendar"></span>
+                  Year
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {% for report in all_reports %}
+                  <a class="dropdown-item" href="/{{report.home.id}}/reports/{{report.year}}">{{report.year}}</a>
+                  {% endfor %}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -96,26 +106,16 @@
               </tbody>
             </table>
           </div>
-          <div class="py-1 text-warning text-center">
-            <button class="btn btn-sm btn-danger">Delete Report</button>
-          </div>
+          <a href='/{{home.id}}/report/{{report.year}}/destroy'>
+            <div class="py-1 text-warning text-center">
+              <button class="btn btn-sm btn-danger">Delete Report</button>
+            </div>
+          </a>
          </main>
       </div>
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-
-    <!-- Icons -->
-    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-    <script>
-      feather.replace()
-    </script>
+    {% include 'base/bootstrap_js.html' %}
 
     <!-- Graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>

@@ -21,10 +21,11 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand">T-Project</h3>
+          <h3 class="masthead-brand">T-Project <span class="badge badge-secondary">BETA</span> </h3>
           <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="#">Contact</a>
+            <!-- <a class="nav-link active" href="/">Home</a> -->
+            <!-- <a class="nav-link" href="#">Contact</a> -->
+            <!-- <a class="nav-link" href="#">Feeback</a> -->
           </nav>
         </div>
       </header>
@@ -59,7 +60,7 @@
                 <div class="col-9">
                     <input type="text" name= "email" class="form-control" id="email" placeholder="" value="" required>
                   <div class="py-2">
-                    <input type="text" name= "password" class="form-control" id="password" placeholder="" value="" required>
+                    <input type="password" name= "password" class="form-control" id="password" placeholder="" value="" required>
                   </div>
                 </div>
               </div>
@@ -79,12 +80,7 @@
       </footer>
     </div>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    {% include 'base/bootstrap_js.html' %}
+
   </body>
 </html>
