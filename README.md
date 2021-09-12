@@ -1,2 +1,2 @@
 # T-Project
-Energy Savings and Transition Program
+A community tool for people on their energy transition journey
