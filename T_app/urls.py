@@ -20,7 +20,6 @@ urlpatterns = [
     path('<int:id>/reports/<int:year>', views.reports_year),
     path('<int:id>/new_report', views.new_report),
     path('<int:id>/report_create', views.report_create),
-
     path('<int:id>/edit_report/<int:year>', views.edit_report),
     path('<int:id>/report_edited/<int:year>', views.report_edited),
     path('<int:id>/report/<int:year>/destroy', views.reportdestroy),
@@ -29,26 +28,7 @@ urlpatterns = [
 
     path('transition', views.transition),
     path('community', views.community),
-
-
-
-
-
-    path('dashboard', views.jobs),
-    path('jobs', views.jobs),
-    path('newjob', views.newjob),
-    path('jobcreate', views.jobcreate),
-
-    path('job/<int:id>', views.edit_job),
-    path('job/edit/<int:id>', views.job_edited),
-
-    path('viewjob/<int:id>', views.job),
-
     
-    #Black Belt
-    path('jobhelper/<int:id>', views.jobhelpercreate),
-    path('destory_jobhelper/<int:id>', views.destroyjobhelper),
-    path('job/<int:id>/destroy', views.jobdestroy),
 
     path('view', views.users_view),
 ]
