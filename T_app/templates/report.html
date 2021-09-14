@@ -22,9 +22,11 @@
                 <a href="/{{home.id}}/new_report">
                 <button class="btn btn-sm btn-outline-secondary">Add</button>
                 </a>
-                <a href="/{{home.id}}/edit_report/{{report.year}}">
-                <button class="btn btn-sm btn-outline-secondary">Edit</button>
-                </a>
+                {% if report %}
+                  <a href="/{{home.id}}/edit_report/{{report.year}}">
+                  <button class="btn btn-sm btn-outline-secondary">Edit</button>
+                  </a>
+                {% endif %}
               </div>
               
               <div class="dropdown">

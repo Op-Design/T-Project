@@ -51,6 +51,8 @@ class ReportYManager (models.Manager):
             year = ReportY.objects.filter(home=home).filter(year=postData['year'])
             if year:
                 errors['year_unique']='A report for this year has already been created. Try editing the report instead.'
+        if len(postData['year'])<2000:
+            errors['year_range']='Year should be after 2000'
         if len(postData['jan_energy'])<1:
             errors['energy']='Energy use should be at least 1 kWh'
         if len(postData['feb_energy'])<1:
