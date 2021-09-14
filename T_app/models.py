@@ -47,12 +47,23 @@ class HomeManager (models.Manager):
 class ReportYManager (models.Manager):
     def basic_validator(self,postData,home,create):
         errors={}
+        # set = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        # for data in postData:
+        #     if not set.match(postData[data]):
+        #         errors['num_req'] = 'All inputs must be numerical'
+        # for data in postData:
+        #     try:
+        #         int(data)
+        #     except:
+        #         errors['num_req'] = 'All inputs must be numerical'
+
         if create == True:
-            year = ReportY.objects.filter(home=home).filter(year=postData['year'])
-            if year:
-                errors['year_unique']='A report for this year has already been created. Try editing the report instead.'
-        if len(postData['year'])<2000:
-            errors['year_range']='Year should be after 2000'
+            if postData['year'] == '':
+                errors['year_non-numerical'] = 'Year must be numerical'
+            else:
+                year = ReportY.objects.filter(home=home).filter(year=postData['year'])
+                if year:
+                    errors['year_unique']='A report for this year has already been created. Try editing the report instead.'
         if len(postData['jan_energy'])<1:
             errors['energy']='Energy use should be at least 1 kWh'
         if len(postData['feb_energy'])<1:
