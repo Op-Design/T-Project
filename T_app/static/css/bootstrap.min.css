@@ -76,6 +76,7 @@
     color: #212529;
     text-align: left;
     background-color: #fff;
+    padding-top: 30px;
   }
   [tabindex="-1"]:focus {
     outline: 0 !important;
@@ -8251,6 +8252,7 @@
     }
     body {
       min-width: 992px !important;
+      padding-top: 100px;
     }
     .container {
       min-width: 992px !important;

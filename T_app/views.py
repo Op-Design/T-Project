@@ -137,6 +137,10 @@ def reports(request, id):
         if 'user_id' in request.session:
             current_year=date.today().year
             home = id
+            # I seek to pull the most recent year here
+                # logged_user = User.objects.get(id=request.session['user_id'])
+                # logged_user_home = Home.objects.filter(user=logged_user).filter(id=id).first()
+                # current_year=ReportY.objects.filter(home=logged_user_home).first().year
             return redirect(f'/{home}/reports/{current_year}')
         return redirect ('/')
     return redirect ('/')
