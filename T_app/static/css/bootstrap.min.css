@@ -8251,6 +8251,7 @@
     }
     body {
       min-width: 992px !important;
+      padding-top: 70px;
     }
     .container {
       min-width: 992px !important;
