@@ -14,7 +14,7 @@ def registration(request):
             for key, value in errors.items():
                 messages.error(request, value)
             return redirect('/registration')
-        # Sends data and creates objects is everything is verified
+        # Sends data and creates objects if everything is verified
         else:
             password = request.POST['password']
             pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
